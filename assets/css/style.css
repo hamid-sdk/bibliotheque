@@ -1,0 +1,8 @@
+/* Ajouter un effet de zoom sur la carte au survol */
+.hover-zoom {
+    transition: transform 0.3s ease; /* Transition fluide pour l'effet */
+}
+
+.hover-zoom:hover {
+    transform: scale(1.05); /* Agrandir la carte de 5% au survol */
+}
