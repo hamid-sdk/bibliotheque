@@ -7,7 +7,7 @@
     <div class="row">
         <!-- Image du livre à gauche -->
         <div class="col-md-4 text-center">
-            <img src="<?= URL_ASSETS; ?>images/image.jpeg" class="img-fluid" alt="Image du livre">
+            <img src="<?= URL_ASSETS . 'images/' . $livre['image']; ?>" class="img-fluid" alt="Image du livre">
         </div>
 
         <!-- Informations sur le livre à droite -->
@@ -22,7 +22,7 @@
             <p><?= nl2br(htmlspecialchars($livre['description'])) ?></p>
             <div class="text-center">
                 <a href="index.php?p=livres" class="btn btn-primary">Retour à la liste des livres</a>
-                <?php if (isset($user) && $user['id_utilisateur'] != 7): ?>
+                <?php  if (isset($user) && $userRole !== 'admin'):  ?>
                     <!-- si le livre est disponible j'affiche le bouton pour emprunter  -->
                     <?php if ($livre['statut'] === "disponible"): ?>
                         <form action="index.php?p=emprunterLivre" method="post" style="display:inline;">

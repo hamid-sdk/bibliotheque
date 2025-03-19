@@ -18,6 +18,16 @@
             <?php endif; ?>
         </div>
 
+        <!-- Champ pour le prenom -->
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control <?php echo isset($erreurs['prenom']) ? 'is-invalid' : ''; ?>" name="prenom" id="prenom" placeholder="Entrez votre prenom" value="<?php echo isset($prenom) ? htmlspecialchars($prenom) : ''; ?>">
+            <label for="prenom" class="form-label">Prenom</label>
+            <!-- Affichage de l'erreur pour le prenom -->
+            <?php if (isset($erreurs['prenom'])): ?>
+                <div class="invalid-feedback"><?php echo htmlspecialchars($erreurs['prenom']); ?></div>
+            <?php endif; ?>
+        </div>
+
         <!-- Champ pour l'email -->
         <div class="form-floating mb-3">
             <input type="text" class="form-control <?php echo isset($erreurs['email']) ? 'is-invalid' : ''; ?>" name="email" id="email" placeholder="Entrez votre mail" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>">

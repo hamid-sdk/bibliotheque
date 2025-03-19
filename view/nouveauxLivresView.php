@@ -12,7 +12,7 @@
         ?>
                 <div class="col">
                     <div class="card hover-zoom">
-                        <img src="<?= URL_ASSETS; ?>images/image.jpeg" class="card-img-top" alt="Image du livre">
+                        <img src="<?= URL_ASSETS . 'images/' . $nouveaulivre['image']; ?>" class="card-img-top" alt="Image du livre">
                         <div class="card-body">
                             <h5 class="card-title"> <?= mb_strimwidth($nouveaulivre["titre"], 0, 20, "..."); ?></h5>
                             <p class="card-text">Auteur: <?= mb_strimwidth($nouveaulivre["auteur"], 0, 20, "..."); ?></p>

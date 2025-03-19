@@ -6,6 +6,8 @@ function accueilPage()
 {
     // je mets la session dans une variable 
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
     // cette fonction permet d'afficher quelques  livres presents dans la bdd
     $livres = afficheLivres(false);
     //Cette fonction permet d'afficher quelques nouveaux livres dans la bdd
@@ -26,14 +28,15 @@ function inscriptionPage()
     // si l'utilisateur est connecté il ne peux pas acceder a la page inscription 
     if (isset($_POST["bouton"])) {
         $nom = $_POST["nom"];
+        $prenom = $_POST["prenom"];
         $email = $_POST["email"];
         $mot_de_passe = $_POST["mot_de_passe"];
         $confirm_mot_de_passe = $_POST["confirm_mot_de_passe"];
 
         // je mets toutes les verifications des champs dans une variable $erreur
-        $erreurs = VerifInscriptionChamp($nom, $email, $mot_de_passe, $confirm_mot_de_passe);
+        $erreurs = VerifInscriptionChamp($nom,$prenom, $email, $mot_de_passe, $confirm_mot_de_passe);
         if (empty($erreurs)) {
-            inscriptionInserer($nom, $email, $mot_de_passe);
+            inscriptionInserer($nom, $prenom, $email, $mot_de_passe);
             // je redirige vers la page connexion une fois que la personne est connectée 
             header("location:index.php?p=connexion");
         } else {
@@ -45,13 +48,16 @@ function inscriptionPage()
     }
 }
 // cette fonction verifie toutes les champs de lapage inscription pour voir si elles sont correctes
-function VerifInscriptionChamp($nom, $email, $mot_de_passe, $confirm_mot_de_passe): array
+function VerifInscriptionChamp($nom,$prenom, $email, $mot_de_passe, $confirm_mot_de_passe): array
 {
     // j'initialise le tableau par un tableau vide 
     $erreurs = [];
     // Vérification du nom
     if (empty($nom)) {
         $erreurs['nom'] = "Veuillez entrer votre nom";
+    }
+    if (empty($prenom)) {
+        $erreurs['prenom'] = "Veuillez entrer votre prenom";
     }
     // Vérification de l'email
     if (empty($email)) {
@@ -110,9 +116,10 @@ function connexionPage()
                 if (password_verify($mot_de_passe, $utilisateur['mot_de_passe'])) {
                     $_SESSION["utilisateur"] = $utilisateur;
                     $userId = $_SESSION["utilisateur"]["id_utilisateur"];
+                    $userRole = $_SESSION["utilisateur"]["role"];
                     //Mon but est d'afficher une fois connecter le nombre exacte de livre réserver et emprunter dans le header(debut)
                     // si il s'agit de l'administrateur j'affiche le nombre de l'ensemble des emprunts et des réservations 
-                    if ($userId == 7) {
+                    if ($userRole === 'admin') {
                         // Récupérer le total des livres reserver  
                         $livresReserves = afficheTousLesReservations();
                         // Récupérer le totaldes livres empruntés 
@@ -123,8 +130,8 @@ function connexionPage()
                         // Récupérer la liste des livres empruntés par l'utilisateur
                         $livresEmpruntes = afficheLivreEmprunter($userId);
                     }
-                        // Récupérer le total des messages 
-                    $messages = afficheMessagesUtilisateurs($userId);
+                    // Récupérer le total des messages 
+                    $messages = afficheMessagesUtilisateurs($userId, $userRole);
                     if ($livresEmpruntes) {
                         // je compte le nombre de livre qu'il a emprunter pour l'afficher dans le header 
                         $_SESSION["nombreEmprunts"] = count($livresEmpruntes);
@@ -262,9 +269,10 @@ function empruntPage()
     }
     // Récupérer l'id de l'utilisateur
     $userId = $user['id_utilisateur'];
+    $userRole = $user['role'];
 
-    // Si l'utilisateur est l'administrateur (id_utilisateur == 7)
-    if ($userId == 7) {
+    // Si l'utilisateur est l'administrateur 
+    if ($userRole === 'admin') {
         // Récupérer tous les emprunts avec les informations des utilisateurs
         $livresEmpruntes = afficheTousLesEmprunts();
     } else {
@@ -389,8 +397,9 @@ function reservationPage()
     }
     // Récupérer l'id de l'utilisateur
     $userId = $user['id_utilisateur'];
-    // Si l'utilisateur est l'administrateur (id_utilisateur == 7)
-    if ($userId == 7) {
+    $userRole = $user['role'];
+    // Si l'utilisateur est l'administrateur 
+    if ($userRole === 'admin') {
         // Récupérer tous les emprunts avec les informations des utilisateurs
         $livresReserves = afficheTousLesReservations();
     } else {
@@ -466,7 +475,8 @@ function profilPage()
 {
     // Récupérer la session utilisateur
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
-
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
     // Vérifier si l'utilisateur est connecté
     if (!$user) {
         $_SESSION['annulation'] = "Veuillez vous connecter pour annuler une réservation.";
@@ -583,7 +593,10 @@ function messagesPage()
 
     // ID de l'utilisateur connecté
     $userId = $user['id_utilisateur'];
-    if ($userId != 7) {
+    $userRole = $user['role'];
+    if ($userRole === 'admin') {
+        // Récupérer l'ID de l'administrateur à partir de l'utilisateur connecté
+        $id_administrateur = $userId; // ID de l'administrateur connecté
 
         // Récupérer les emprunts avec une date d'échéance proche pour l'utilisateur connecter 
         $utilisateursEcheanceProche = afficheUtilisateurDateEcheanceProche($userId);
@@ -596,7 +609,6 @@ function messagesPage()
                     $id_livre = $emprunt['id_livre'];
                     $titre_livre = $emprunt['titre'];
                     $date_echeance = $emprunt['date_echeance'];
-                    $id_administrateur = 7; // ID de l'administrateur par défaut
 
                     // Format de la date d'échéance
                     $dateEcheanceFormattee = date('d-m-Y', strtotime($date_echeance));
@@ -613,7 +625,7 @@ function messagesPage()
         }
     }
     //  j'affiche maintenant les messages 
-    $messages = afficheMessagesUtilisateurs($userId);
+    $messages = afficheMessagesUtilisateurs($userId, $userRole);
     // Si l'utilisateur ou l'administrateur a des messages je les comptent 
     if ($messages) {
         $_SESSION["nombreMessages"] = count($messages);

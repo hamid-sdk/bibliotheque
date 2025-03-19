@@ -11,31 +11,16 @@
 
 <!-- Grille des boutons avec Bootstrap -->
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-1 g-4">
 
-        <!-- Bouton pour gérer les livres -->
-        <div class="col">
+        <!-- Bouton pour gérer les livres (prenant toute la largeur) -->
+        <div class="col-12">
             <a href="index.php?p=administrateur/gererLivres" class="btn btn-lg btn-primary w-100 p-4 text-white shadow-sm fw-bold">Gérer les Livres</a>
         </div>
 
-        <!-- Bouton pour gérer les utilisateurs -->
-        <div class="col">
-            <a href="index.php?p=gestionUtilisateurs" class="btn btn-lg btn-primary w-100 p-4 text-white shadow-sm fw-bold">Gérer les Utilisateurs</a>
-        </div>
-
-        <!-- Bouton pour voir les statistiques -->
-        <div class="col">
-            <a href="index.php?p=statistiques" class="btn btn-lg btn-primary w-100 p-4 text-white shadow-sm fw-bold">Voir les Statistiques</a>
-        </div>
-
-        <!-- Bouton pour paramétrer le site -->
-        <div class="col">
-            <a href="index.php?p=parametresSite" class="btn btn-lg btn-primary w-100 p-4 text-white shadow-sm fw-bold">Paramètres du Site</a>
-        </div>
-
-        <!-- Bouton pour gérer les commandes -->
-        <div class="col">
-            <a href="index.php?p=gestionCommandes" class="btn btn-lg btn-primary w-100 p-4 text-white shadow-sm fw-bold">Gérer les Commandes</a>
+        <!-- Bouton pour gérer les utilisateurs (prenant toute la largeur) -->
+        <div class="col-12">
+            <a href="index.php?p=administrateur/gererUtilisateurs" class="btn btn-lg btn-primary w-100 p-4 text-white shadow-sm fw-bold">Gérer les Utilisateurs</a>
         </div>
 
     </div>

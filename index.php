@@ -75,6 +75,12 @@ if (isset($_GET["p"])) {
         case 'administrateur/gererLivres/supprimerLivres';
             supprimerLivresPage();
             break;
+        case 'administrateur/gererUtilisateurs';
+            gererUtilisateursPage();
+            break;
+        case 'administrateur/gererUtilisateurs/desinscrireUtilisateurs';
+            desinscrireUtilisateursPage();
+            break;
         case 'messages';
             messagesPage();
             break;

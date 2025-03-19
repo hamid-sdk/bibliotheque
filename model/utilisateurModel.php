@@ -2,14 +2,15 @@
 // cette page est dedier a toute les requettes en bdd qui concernent les utilsateurs 
 // j'inclus dans cette page le dbModel.php
 require("dbModel.php");
-function inscriptionInserer($nom, $email, $mot_de_passe)
+function inscriptionInserer($nom, $prenom, $email, $mot_de_passe)
 {
     try {
         // je me connecte a la base de donnée 
         $pdo = dbConnect();
         // je lance la requette d'insertion 
-        $pdoStatement = $pdo->prepare('INSERT INTO utilisateurs (nom,email,mot_de_passe) VALUES (:nom,:email,:mot_de_passe)');
+        $pdoStatement = $pdo->prepare('INSERT INTO utilisateurs (nom,prenom,email,mot_de_passe) VALUES (:nom,:prenom,:email,:mot_de_passe)');
         $pdoStatement->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $pdoStatement->bindParam(':prenom', $prenom, PDO::PARAM_STR);
         $pdoStatement->bindParam(':email', $email, PDO::PARAM_STR);
         // je hashe le mot de passe
         $mot_de_passe_hasher = password_hash($mot_de_passe, PASSWORD_DEFAULT);
@@ -537,13 +538,13 @@ function messageDejaEnvoye($id_utilisateur, $id_livre): bool
 
 
 //Cette fonction permet d'afficher les messages d'un utilisateurs 
-function afficheMessagesUtilisateurs($userId): array
+function afficheMessagesUtilisateurs($userId, $userRole): array
 {
     try {
 
         // Connexion à la base de données
         $pdo = dbConnect();
-        if ($userId != 7) {
+        if ($userRole !== 'admin') {
             // Requête afficher les messages d'un utilisateur 
             $pdoStatement = $pdo->prepare('SELECT * FROM messages WHERE id_utilisateur = :userId ORDER BY date_envoi DESC');
             $pdoStatement->bindParam(':userId', $userId, PDO::PARAM_INT);
@@ -558,6 +559,6 @@ function afficheMessagesUtilisateurs($userId): array
         return $messages;
     } catch (PDOException $e) {
         echo "Erreur : " . $e->getMessage();
-        return false;
+        return [];
     }
 }

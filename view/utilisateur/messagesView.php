@@ -1,5 +1,5 @@
 <?php ob_start(); ?>
-<h1 class="text-center my-4"><?= isset($user) && $user["id_utilisateur"] == 7 ? 'Consulter les messages' : 'Mes messages' ?></h1>
+<h1 class="text-center my-4"><?= isset($user) && $user["role"] == 'admin'  ? 'Consulter les messages' : 'Mes messages' ?></h1>
 <!-- Affichage des messages -->
 <div class="container my-5">
     <?php if (!empty($messages)): ?>
@@ -10,7 +10,7 @@
                     <!-- Card pour chaque message -->
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
-                            <span class="font-weight-bold"><?= isset($user) && $user["id_utilisateur"] == 7 ? 'Envoyé à: ' . $message["nom"] . ' ' . $message["prenom"] : 'De: Hamid ADENLE' ?></span>
+                            <span class="font-weight-bold"><?= isset($user) && $user["role"] == 'admin' ? 'Envoyé à: ' . $message["nom"] . ' ' . $message["prenom"] : 'De: Hamid ADENLE' ?></span>
                             <span class="text-muted"><?= date('d/m/Y H:i', strtotime($message['date_envoi'])); ?></span>
                         </div>
                         <div class="card-body">
@@ -18,7 +18,7 @@
                         </div>
                         <div class="card-footer d-flex justify-content-between ">
                             <a href="index.php?p=detailLivre&idLivre=<?= $message["id_livre"] ?>" class="btn btn-sm btn-outline-primary"> Détails</a>
-                            <?php if (isset($user) && $user["id_utilisateur"] != 7): ?>
+                            <?php if (isset($user) && $user["role"] != 'admin'): ?>
                                 <a href="index.php?p=retournerLivre&idEmprunt=<?= $message['id_livre'] ?>" class="btn btn-sm btn-outline-danger">Retourner</a>
                             <?php endif; ?>
                         </div>

@@ -29,7 +29,8 @@
                     <?php else: ?>
                         <div class="d-flex justify-content-center align-items-center rounded-circle bg-primary text-white mb-3"
                             style="width: 150px; height: 150px; font-size: 2rem;">
-                            <?= strtoupper($user['prenom'][0]) . strtoupper($user['nom'][0]); ?>
+                            <?= (isset($user['prenom']) && !empty($user['prenom']) ? strtoupper($user['prenom'][0]) : '') .
+                                (isset($user['nom']) && !empty($user['nom']) ? strtoupper($user['nom'][0]) : ''); ?>
                         </div>
                     <?php endif; ?>
                     <h3 class="card-title"><?= htmlspecialchars($user['prenom'] . " " . $user['nom']); ?></h3>
@@ -70,7 +71,7 @@
                             <?php if (isset($erreurs['email'])): ?>
                                 <div class="text-danger"><?= $erreurs['email']; ?></div>
                             <?php endif; ?>
-                        </div>  
+                        </div>
                         <div class="mb-3">
                             <label for="photo" class="form-label">Photo de profil</label>
                             <input type="file" class="form-control" id="photo" name="photo" accept="image/*">

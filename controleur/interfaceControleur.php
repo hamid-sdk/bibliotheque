@@ -6,6 +6,8 @@ function page404()
 {
     // je mets la session dans une variable 
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
     require("./view/404View.php");
 }
 // Cette fonction permet  permet d'afficher tous les livres dans la bdd
@@ -13,6 +15,8 @@ function livresPage()
 {
     // je mets la session dans une variable 
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
     $livres = afficheLivres(true);
     require("./view/livresView.php");
 }
@@ -20,6 +24,8 @@ function nouveauxLivresPage()
 {
     // je mets la session dans une variable 
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
     $nouveauxlivres = afficheNouveauxLivres(true);
     require("./view/nouveauxLivresView.php");
 }
@@ -27,6 +33,8 @@ function categoriesPage()
 {
     // je mets la session dans une variable 
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
     $livresParCategorie = afficheLivresParCategorie();
     require("./view/livresParCategorieView.php");
 }
@@ -34,6 +42,8 @@ function detailLivrePage()
 {
     // je mets la session dans une variable 
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
     // Vérification si l'ID du livre est passé dans l'URL
     if (isset($_GET["idLivre"])) {
         $id_livre = $_GET["idLivre"];  // Récupération de l'ID du livre depuis l'URL
@@ -62,6 +72,8 @@ function rechercheLivrePage()
 {
     // Je mets la session dans une variable 
     $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+    // je mets le role de l'utilisateur connecté dans une variable 
+    $userRole = isset($user) ? $user["role"] : null;
 
     // Je vérifie si le formulaire a été envoyé 
     if (isset($_POST["bouton"])) {

@@ -6,9 +6,10 @@ function accueilAdminPage()
 {
    // Récupérer la session utilisateur
    $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
-
-   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur (id = 7)
-   if (!$user || $user['id_utilisateur'] != 7) {
+   // je mets le role de l'utilisateur connecté dans une variable 
+   $userRole = isset($user) ? $user["role"] : null;
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   if (!$user || $user['role'] !== 'admin') {
       $_SESSION['annulation'] = "Vous devez être administrateur pour accéder à cette page.";
       header("Location: index.php"); // Rediriger vers la page de connexion
       exit;
@@ -20,25 +21,46 @@ function gererLivresPage()
 {
    // Récupérer la session utilisateur
    $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
-
-   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur (id = 7)
-   if (!$user || $user['id_utilisateur'] != 7) {
+   $userRole = isset($user) ? $user["role"] : null;
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   if (!$user || $user['role'] !== 'admin') {
       $_SESSION['annulation'] = "Vous devez être administrateur pour accéder à cette page.";
       header("Location: index.php");
       exit;
    }
    // Cette fonction retourne tous les livres dans ma base de donnée 
    $livres = afficheLivres(true);
-   require("./view/administrateur/gererLivre/accueilgererLivre.php");
+   require("./view/administrateur/gererLivres/accueilgererLivres.php");
 }
+
+//Cette fonction permet d'afficher tous les utilisateurs disponibles afin que l'administrateur puisse faire des ajouts,des modifs,ou des suppression
+function gererUtilisateursPage()
+{
+   // Récupérer la session utilisateur
+   $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+   $userRole = isset($user) ? $user["role"] : null;
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   if (!$user || $user['role'] !== 'admin') {
+      $_SESSION['annulation'] = "Vous devez être administrateur pour accéder à cette page.";
+      header("Location: index.php");
+      exit;
+   }
+   // Cette fonction retourne tous les livres dans ma base de donnée 
+   $utilisateurs = afficheUtilisateurs();
+   require("./view/administrateur/gererUtilisateurs/accueilgererUtilisateurs.php");
+}
+
 //Cette fonction permet de modifier un livre 
 function modifierLivresPage()
 {
    // Vérifier si l'utilisateur est connecté
    $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
-
-   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur (id = 7)
-   if (!$user || $user['id_utilisateur'] != 7) {
+   $userRole = isset($user) ? $user["role"] : null;
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   if (!$user || $user['role'] !== 'admin') {
       $_SESSION['annulation'] = "Vous devez être administrateur pour accéder à cette page.";
       header("Location: index.php");
       exit;
@@ -113,7 +135,7 @@ function modifierLivresPage()
             $imagePath = $dossierUploads . $imageNom;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
                // L'URL de l'image
-               $imageUrl = URL_ASSETS . 'images/' . $imageNom;
+               $image = $imageNom;
             } else {
                $erreurs['image'] = "Une erreur est survenue lors de la modification de l'image.";
             }
@@ -121,7 +143,7 @@ function modifierLivresPage()
       }
       if (empty($erreurs)) {
          // Mise à jour du livre dans la base de données
-         $modifierLivre = modifierLivre($id_livre, $titre, $auteur, $categorieNom, $isbn, $statut, $description, $imageUrl);
+         $modifierLivre = modifierLivre($id_livre, $titre, $auteur, $categorieNom, $isbn, $statut, $description, $image);
          if ($modifierLivre) {
             $_SESSION['success'] = "Le livre a été modifié avec succès.";
             header("Location: index.php?p=administrateur/gererLivres");
@@ -135,16 +157,17 @@ function modifierLivresPage()
       }
    }
    // Charger la vue pour modifier le livre
-   require("./view/administrateur/gererLivre/modifLivre.php");
+   require("./view/administrateur/gererLivres/modifLivre.php");
 }
 //Cette fonction permet d'ajouter un livre 
 function ajouterLivresPage()
 {
    // Vérifier si l'utilisateur est connecté
    $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
-
-   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur (id = 7)
-   if (!$user || $user['id_utilisateur'] != 7) {
+   $userRole = isset($user) ? $user["role"] : null;
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   if (!$user || $user['role'] !== 'admin') {
       $_SESSION['annulation'] = "Vous devez être administrateur pour accéder à cette page.";
       header("Location: index.php");
       exit;
@@ -189,7 +212,7 @@ function ajouterLivresPage()
             $imagePath = $dossierUploads . $imageNom;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
                // L'URL de l'image
-               $imageUrl = URL_ASSETS . 'images/' . $imageNom;
+               $image = $imageNom;
             } else {
                $erreurs['image'] = "Une erreur est survenue lors de l'ajout de l'image.";
             }
@@ -197,7 +220,7 @@ function ajouterLivresPage()
       }
       if (empty($erreurs)) {
          // Ajouter le livre dans la base de données
-         $ajoutLivre = ajouterLivre($titre, $auteur, $categorieNom, $isbn, $statut, $description, $imageUrl);
+         $ajoutLivre = ajouterLivre($titre, $auteur, $categorieNom, $isbn, $statut, $description, $image);
          if ($ajoutLivre) {
             $_SESSION['success'] = "Le livre a été ajouté avec succès.";
             header("Location: index.php?p=administrateur/gererLivres");
@@ -208,7 +231,7 @@ function ajouterLivresPage()
       }
    }
 
-   require("./view/administrateur/gererLivre/ajoutLivre.php");
+   require("./view/administrateur/gererLivres/ajoutLivre.php");
 }
 // Fonction pour nettoyer le titre du livre et le rendre valide pour un nom de fichier
 function cleanTitreLivre($titre)
@@ -255,9 +278,10 @@ function supprimerLivresPage()
 {
    // Récupérer la session utilisateur
    $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
-
-   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur (id = 7)
-   if (!$user || $user['id_utilisateur'] != 7) {
+   $userRole = isset($user) ? $user["role"] : null;
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   // Vérifier si l'utilisateur est connecté et si c'est l'administrateur 
+   if (!$user || $user['role'] !== 'admin') {
       $_SESSION['annulation'] = "Vous devez être administrateur pour accéder à cette page.";
       header("Location: index.php"); // Rediriger vers la page d'accueil ou de connexion
       exit;
@@ -299,5 +323,49 @@ function supprimerLivresPage()
 
    // Rediriger vers la page de gestion des livres après la suppression
    header("Location: index.php?p=administrateur/gererLivres");
+   exit;
+}
+
+
+//Cette fonction permet a l'admin  de désinscrire un utilisateur 
+function desinscrireUtilisateursPage() {
+   // Vérifier si l'utilisateur est bien connecté et qu'il a le rôle d'administrateur
+   $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
+   $userRole = isset($user) ? $user["role"] : null;
+   
+   if (!$user || $user['role'] !== 'admin') {
+       $_SESSION['annulation'] = "Vous devez être administrateur pour effectuer cette action.";
+       header("Location: index.php");
+       exit;
+   }
+
+   // Vérifier si l'ID de l'utilisateur est bien passé en paramètre
+   if (!isset($_GET['id']) || empty($_GET['id'])) {
+       $_SESSION['erreur'] = "Aucun utilisateur sélectionné pour la désinscription.";
+       header("Location: index.php?p=administrateur/gererUtilisateurs");
+       exit;
+   }
+
+   // Récupérer l'ID de l'utilisateur à désinscrire
+   $id_utilisateur = intval($_GET['id']);
+
+   // Vérifier si l'utilisateur a des réservations ou emprunts en cours
+   if (aDesReservationsOuEmprunts($id_utilisateur)) {
+       $_SESSION['erreur'] = "L'utilisateur a des réservations ou emprunts en cours. Impossible de le désinscrire.";
+       header("Location: index.php?p=administrateur/gererUtilisateurs");
+       exit;
+   }
+
+   // Appeler la fonction pour supprimer l'utilisateur de la base de données
+   $utilisateurSupprime = supprimerUtilisateur($id_utilisateur);
+
+   if ($utilisateurSupprime) {
+       $_SESSION['success'] = "L'utilisateur a été désinscrit avec succès.";
+   } else {
+       $_SESSION['erreur'] = "Une erreur est survenue lors de la désinscription de l'utilisateur.";
+   }
+
+   // Rediriger vers la page de gestion des utilisateurs
+   header("Location: index.php?p=administrateur/gererUtilisateurs");
    exit;
 }

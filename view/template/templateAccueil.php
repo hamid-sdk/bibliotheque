@@ -17,8 +17,7 @@
       <div class="container-fluid">
         <!-- Logo et nom du site -->
         <a class="navbar-brand" href="index.php?p=accueil">
-          <img src="<?= URL_ASSETS; ?>images/logo.png" alt="Logo" width="40" height="30" class="d-inline-block align-text-top">
-          Bibliothèque
+          <img src="<?= URL_ASSETS; ?>images/logoBookAddict.png" alt="Logo" width="100" height="80" class="d-inline-block align-text-top">
         </a>
 
         <!-- Bouton pour écran réduit -->
@@ -66,7 +65,7 @@
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><?= $_SESSION["nombreMessages"] ?></span>
               </a>
             <?php endif; ?>
-            <?php if (isset($user) && $user['id_utilisateur'] == 7): ?>
+            <?php  if (isset($user) && $userRole == 'admin'):  ?>
               <a href="index.php?p=administrateur" class="btn btn-outline-primary">Dashboard</a>
             <?php endif; ?>
 
@@ -91,12 +90,12 @@
     </nav>
   </header>
 
-  <main class="container my-5 flex-grow-1">
+  <main class="container  flex-grow-1" style="margin-top: 150px;margin-bottom: 50px;">
     <!-- Contenu principal -->
     <?php echo $contenue ?>
   </main>
 
-  <footer class="bg-dark text-white text-center py-3 mt-5 mt-auto">
+  <footer class="bg-dark text-white text-center py-3 mt-5 mt-auto" >
     <p class="mb-0">&copy; 2024 Bibliothèque. Tous droits réservés.</p>
   </footer>
 

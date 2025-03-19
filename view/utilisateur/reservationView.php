@@ -18,7 +18,7 @@ if (isset($_SESSION['annulation'])): ?>
 
 
 
-<h1 class="text-center my-4"><?= isset($user) && $user["id_utilisateur"] == 7 ? 'Tous les réservations' : 'Vos réservations' ?></h1>
+<h1 class="text-center my-4"><?= isset($user) && $user["role"] == 'admin' ? 'Tous les réservations' : 'Vos réservations' ?></h1>
 
 <!-- Si l'utilisateur a des livres réservés -->
 <?php if (!empty($livresReserves)): ?>
@@ -26,7 +26,7 @@ if (isset($_SESSION['annulation'])): ?>
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
-                    <?php if (isset($user) && $user["id_utilisateur"] == 7): ?>
+                    <?php if (isset($user) && $user["role"] == 'admin'): ?>
                         <!-- Affichage des colonnes spécifiques à l'administrateur -->
                         <th>Reserveur</th>
                         <th>Email</th>
@@ -40,7 +40,8 @@ if (isset($_SESSION['annulation'])): ?>
             <tbody>
                 <?php foreach ($livresReserves as $livre): ?>
                     <tr>
-                        <?php if (isset($user) && $user["id_utilisateur"] == 7): ?>
+                        <?php if (isset($user) && $user["role"] == 'admin'): ?>
+
                             <!-- Si l'utilisateur est un administrateur, on affiche les informations de l'emprunteur -->
                             <td><?= $livre["nom"] . " " . $livre["prenom"]; ?></td>
                             <td><?= $livre["email"]; ?></td>
@@ -50,7 +51,7 @@ if (isset($_SESSION['annulation'])): ?>
                         <td><?= $livre["date_reservation"]; ?></td>
                         <td>
                             <a href="index.php?p=detailLivre&idLivre=<?= $livre["id_livre"] ?>" class="btn btn-sm btn-outline-primary">Voir Détails</a>
-                            <?php if (isset($user) && $user["id_utilisateur"] != 7): ?>
+                            <?php if (isset($user) && $user["role"] != 'admin'): ?>
                                 <a href="index.php?p=annulerReservation&idReservation=<?= $livre['id_reservation'] ?>" class="btn btn-sm btn-outline-danger">Annuler</a>
                             <?php endif; ?>
                         </td>
@@ -60,17 +61,17 @@ if (isset($_SESSION['annulation'])): ?>
         </table>
         <!-- Bouton pour voir d'autres livres -->
         <div class="text-center">
-            <a href="index.php?p=livres" class="btn btn-primary"><?= isset($user) && $user["id_utilisateur"] == 7 ? 'Voir les livres' : 'Voir notre collection de livre' ?></a>
+            <a href="index.php?p=livres" class="btn btn-primary"><?= isset($user) && $user["role"] == 'admin' ? 'Voir les livres' : 'Voir notre collection de livres' ?></a>
         </div>
     </div>
 <?php else: ?>
     <!-- Si aucun livre n'est réservé -->
     <div class="alert alert-warning text-center" role="alert">
-    <?= isset($user) && $user["id_utilisateur"] == 7 ? 'Aucun utilisateur n\'a reservé de livre' : 'Vous n\'avez actuellement aucune réservation.' ?>
+        <?= isset($user) && $user["role"] == 'admin' ? 'Aucun utilisateur n\'a réservé de livre' : 'Vous n\'avez actuellement aucune réservation.' ?>
     </div>
     <!-- Bouton pour voir d'autres livres -->
     <div class="text-center">
-    <a href="index.php?p=livres" class="btn btn-primary"><?= isset($user) && $user["id_utilisateur"] == 7 ? 'Voir d\'autres livres' : 'Voir notre collection de livres' ?></a>
+        <a href="index.php?p=livres" class="btn btn-primary"><?= isset($user) && $user["role"] == 'admin' ? 'Voir d\'autres livres' : 'Voir notre collection de livres' ?></a>
     </div>
 
 <?php endif; ?>
