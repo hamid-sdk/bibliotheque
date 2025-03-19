@@ -15,7 +15,7 @@
                         <img src="<?= URL_ASSETS . 'images/' . $livre['image']; ?>" class="card-img-top" alt="Image du livre">
 
                         <div class="card-body">
-                            <h5 class="card-title"> <?= mb_strimwidth($livre["titre"], 0, 20, "..."); ?></h5>
+                            <h5 class="card-title"> <?= mb_strimwidth(html_entity_decode($livre["titre"]), 0, 20, "..."); ?></h5>
                             <p class="card-text">Auteur: <?= mb_strimwidth($livre["auteur"], 0, 20, "..."); ?></p>
                             <p class="card-text">Catégorie: <?= $livre["categorie"] ?></p>
                             <p class="card-text">Statut: <?= $livre["statut"] ?></p>

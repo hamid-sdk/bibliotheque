@@ -43,12 +43,12 @@
                 <tbody>
                     <?php foreach ($livres as $livre): ?>
                         <tr>
-                            <td><?= mb_strimwidth($livre["titre"], 0, 30, "..."); ?></td>
-                            <td><?= mb_strimwidth($livre["auteur"], 0, 20, "..."); ?></td>
-                            <td><?= mb_strimwidth($livre["categorie"], 0, 20, "..."); ?></td>
-                            <td><?= mb_strimwidth($livre["isbn"], 0, 20, "..."); ?></td>
-                            <td><?= mb_strimwidth($livre["statut"], 0, 20, "..."); ?></td>
-                            <td><?= mb_strimwidth($livre["date_ajout"], 0, 20, "..."); ?></td>
+                            <td><?= mb_strimwidth(html_entity_decode($livre["titre"]), 0, 30, "..."); ?></td>
+                            <td><?= mb_strimwidth(html_entity_decode($livre["auteur"]), 0, 20, "..."); ?></td>
+                            <td><?= mb_strimwidth(html_entity_decode($livre["categorie"]), 0, 20, "..."); ?></td>
+                            <td><?= mb_strimwidth(html_entity_decode($livre["isbn"]), 0, 20, "..."); ?></td>
+                            <td><?= mb_strimwidth(html_entity_decode($livre["statut"]), 0, 20, "..."); ?></td>
+                            <td><?= mb_strimwidth(html_entity_decode($livre["date_ajout"]), 0, 20, "..."); ?></td>
                             <td>
                                 <?php if (!empty($livre['image'])): ?>
                                     <img src="<?= URL_ASSETS . 'images/' . $livre['image']; ?>"
@@ -59,7 +59,7 @@
                                     <span class="text-muted">Aucune image disponible pour ce livre</span>
                                 <?php endif; ?>
                             </td>
-                            <td><?= mb_strimwidth($livre["description"], 0, 50, "..."); ?></td>
+                            <td><?= mb_strimwidth(html_entity_decode($livre["description"]), 0, 50, "..."); ?></td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="index.php?p=detailLivre&idLivre=<?= $livre["id_livre"] ?>" class="btn btn-sm btn-outline-primary">Voir</a>

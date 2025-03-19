@@ -12,14 +12,14 @@
 
         <!-- Informations sur le livre à droite -->
         <div class="col-md-8">
-            <h2 class="display-4"><?= htmlspecialchars($livre['titre']) ?></h2>
-            <p><strong>Auteur :</strong> <?= htmlspecialchars($livre['auteur']) ?></p>
-            <p><strong>Catégorie :</strong> <?= htmlspecialchars($livre['categorie']) ?></p>
-            <p><strong>ISBN :</strong> <?= htmlspecialchars($livre['isbn']) ?></p>
-            <p><strong>Statut :</strong> <?= htmlspecialchars($livre['statut']) ?></p>
-            <p><strong>Date d'ajout :</strong> <?= htmlspecialchars($livre['date_ajout']) ?></p>
+            <h2 class="display-4"><?= html_entity_decode($livre['titre'])?></h2>
+            <p><strong>Auteur :</strong> <?= html_entity_decode($livre['auteur']) ?></p>
+            <p><strong>Catégorie :</strong> <?= html_entity_decode($livre['categorie']) ?></p>
+            <p><strong>ISBN :</strong> <?= html_entity_decode($livre['isbn']) ?></p>
+            <p><strong>Statut :</strong> <?= html_entity_decode($livre['statut']) ?></p>
+            <p><strong>Date d'ajout :</strong> <?= html_entity_decode($livre['date_ajout']) ?></p>
             <p><strong>Description :</strong></p>
-            <p><?= nl2br(htmlspecialchars($livre['description'])) ?></p>
+            <p><?= nl2br(html_entity_decode($livre['description'])) ?></p>
             <div class="text-center">
                 <a href="index.php?p=livres" class="btn btn-primary">Retour à la liste des livres</a>
                 <?php  if (isset($user) && $userRole !== 'admin'):  ?>

@@ -103,8 +103,8 @@ function modifierLivresPage()
          $statut = htmlspecialchars(trim($_POST['statut'])); // Si le livre n'est pas emprunté, on prend le statut du formulaire
       }
       $description = htmlspecialchars(trim($_POST['description']));
-      // Initialiser la variable $imageUrl
-      $imageUrl = $livre['image']; // Garder l'ancienne image par défaut
+      // Initialiser la variable $image
+      $image = $livre['image']; // Garder l'ancienne image par défaut
 
       // Vérification des champs
       $erreurs = verifLivreChamp($titre, $auteur, $categorieId, $isbn, $statut, $description);
@@ -120,6 +120,7 @@ function modifierLivresPage()
       }
       // Gestion de l'image
       if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+
          // Dossier de stockage des images
          $dossierUploads = 'assets/images/';
          // Vérifier le type de fichier (uniquement .jpg, .jpeg, .png)
@@ -172,7 +173,7 @@ function ajouterLivresPage()
       header("Location: index.php");
       exit;
    }
-   $imageUrl = '';
+   $image = '';
    $categories = afficheCategorie(); // Récupère les catégories
    // Si l'utilisateur soumet le formulaire
    if (isset($_POST["bouton"])) {
@@ -328,22 +329,23 @@ function supprimerLivresPage()
 
 
 //Cette fonction permet a l'admin  de désinscrire un utilisateur 
-function desinscrireUtilisateursPage() {
+function desinscrireUtilisateursPage()
+{
    // Vérifier si l'utilisateur est bien connecté et qu'il a le rôle d'administrateur
    $user = isloggedIn() ? $_SESSION["utilisateur"] : null;
    $userRole = isset($user) ? $user["role"] : null;
-   
+
    if (!$user || $user['role'] !== 'admin') {
-       $_SESSION['annulation'] = "Vous devez être administrateur pour effectuer cette action.";
-       header("Location: index.php");
-       exit;
+      $_SESSION['annulation'] = "Vous devez être administrateur pour effectuer cette action.";
+      header("Location: index.php");
+      exit;
    }
 
    // Vérifier si l'ID de l'utilisateur est bien passé en paramètre
    if (!isset($_GET['id']) || empty($_GET['id'])) {
-       $_SESSION['erreur'] = "Aucun utilisateur sélectionné pour la désinscription.";
-       header("Location: index.php?p=administrateur/gererUtilisateurs");
-       exit;
+      $_SESSION['erreur'] = "Aucun utilisateur sélectionné pour la désinscription.";
+      header("Location: index.php?p=administrateur/gererUtilisateurs");
+      exit;
    }
 
    // Récupérer l'ID de l'utilisateur à désinscrire
@@ -351,18 +353,18 @@ function desinscrireUtilisateursPage() {
 
    // Vérifier si l'utilisateur a des réservations ou emprunts en cours
    if (aDesReservationsOuEmprunts($id_utilisateur)) {
-       $_SESSION['erreur'] = "L'utilisateur a des réservations ou emprunts en cours. Impossible de le désinscrire.";
-       header("Location: index.php?p=administrateur/gererUtilisateurs");
-       exit;
+      $_SESSION['erreur'] = "L'utilisateur a des réservations ou emprunts en cours. Impossible de le désinscrire.";
+      header("Location: index.php?p=administrateur/gererUtilisateurs");
+      exit;
    }
 
    // Appeler la fonction pour supprimer l'utilisateur de la base de données
    $utilisateurSupprime = supprimerUtilisateur($id_utilisateur);
 
    if ($utilisateurSupprime) {
-       $_SESSION['success'] = "L'utilisateur a été désinscrit avec succès.";
+      $_SESSION['success'] = "L'utilisateur a été désinscrit avec succès.";
    } else {
-       $_SESSION['erreur'] = "Une erreur est survenue lors de la désinscription de l'utilisateur.";
+      $_SESSION['erreur'] = "Une erreur est survenue lors de la désinscription de l'utilisateur.";
    }
 
    // Rediriger vers la page de gestion des utilisateurs
